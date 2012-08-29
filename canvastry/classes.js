@@ -22,12 +22,15 @@
     squares = [];
 
     function Grid(gwidth, gheight, swidth, sheight) {
-      var color, i, _i;
+      var color, i, j, _i, _j;
       this.gwidth = gwidth;
       this.gheight = gheight;
-      for (i = _i = 0; 0 <= gwidth ? _i <= gwidth : _i >= gwidth; i = 0 <= gwidth ? ++_i : --_i) {
-        color = Square.Colors[Math.floor(Math.random() * 3)];
-        squares[i] = new Square(color, swidth, sheight);
+      for (i = _i = 0; 0 <= gheight ? _i <= gheight : _i >= gheight; i = 0 <= gheight ? ++_i : --_i) {
+        squares[i] = [];
+        for (j = _j = 0; 0 <= gwidth ? _j <= gwidth : _j >= gwidth; j = 0 <= gwidth ? ++_j : --_j) {
+          color = Square.Colors[Math.floor(Math.random() * 3)];
+          squares[i][j] = new Square(color, swidth, sheight);
+        }
       }
     }
 
@@ -42,17 +45,25 @@
     };
 
     Grid.prototype.drawGrid = function(canvas) {
-      var ctx, l_o_x, l_o_y, r_u_x, r_u_y, sq, x, _i, _len, _results;
+      var arr, ctx, l_o_x, l_o_y, r_u_x, r_u_y, sq, x, y, _i, _len, _results;
       ctx = canvas.getContext("2d");
       _results = [];
-      for (x = _i = 0, _len = squares.length; _i < _len; x = ++_i) {
-        sq = squares[x];
-        ctx.fillStyle = sq.color;
-        l_o_x = sq.width * x;
-        l_o_y = 0;
-        r_u_x = sq.width * (x + 1);
-        r_u_y = sq.height;
-        _results.push(ctx.fillRect(l_o_x, l_o_y, r_u_x, r_u_y));
+      for (y = _i = 0, _len = squares.length; _i < _len; y = ++_i) {
+        arr = squares[y];
+        _results.push((function() {
+          var _j, _len1, _results1;
+          _results1 = [];
+          for (x = _j = 0, _len1 = arr.length; _j < _len1; x = ++_j) {
+            sq = arr[x];
+            ctx.fillStyle = sq.color;
+            l_o_x = sq.width * x;
+            l_o_y = sq.height * y;
+            r_u_x = sq.width * (x + 1);
+            r_u_y = sq.height * (y + 1);
+            _results1.push(ctx.fillRect(l_o_x, l_o_y, r_u_x, r_u_y));
+          }
+          return _results1;
+        })());
       }
       return _results;
     };

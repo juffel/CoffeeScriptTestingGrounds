@@ -13,9 +13,11 @@ class Grid
     #swidth, sheight: dimensions of squares in grid
     constructor: (@gwidth, @gheight, swidth, sheight) ->
         #fill squares-array
-        for i in [0..gwidth]
+        for i in [0..gheight]
+            squares[i] = []
+            for j in [0..gwidth]
                 color= Square.Colors[Math.floor(Math.random() * 3)]
-                squares[i] = new Square(color, swidth, sheight)
+                squares[i][j] = new Square(color, swidth, sheight)
 
     printGridInfo: ->
         for sq in squares
@@ -23,15 +25,16 @@ class Grid
 
     drawGrid: (canvas) ->
         ctx = canvas.getContext("2d")
-        for sq, x in squares
 
-            ctx.fillStyle=sq.color
-            
-            l_o_x=sq.width*x
-            l_o_y=0
-            r_u_x=sq.width*(x+1)
-            r_u_y=sq.height
-            ctx.fillRect(l_o_x, l_o_y, r_u_x, r_u_y)
+        for arr, y in squares
+            for sq, x in arr
+
+                ctx.fillStyle=sq.color
+                l_o_x=sq.width*x
+                l_o_y=sq.height*y
+                r_u_x=sq.width*(x+1)
+                r_u_y=sq.height*(y+1)
+                ctx.fillRect(l_o_x, l_o_y, r_u_x, r_u_y)
 
 tmp = new Grid(10,10,10,10)
 tmp.drawGrid(document.getElementById("canvy"))
