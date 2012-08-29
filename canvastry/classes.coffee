@@ -1,4 +1,3 @@
-document.write "classes.js loaded"
 #create grid and components
 #square dimensions in pixels (e.g. 10x10px)
 class Square
