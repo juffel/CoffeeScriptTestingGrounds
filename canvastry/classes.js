@@ -22,12 +22,12 @@
     squares = [];
 
     function Grid(gwidth, gheight, swidth, sheight) {
-      var color, i, j, _i, _j;
+      var color, i, j, _i, _j, _ref, _ref1;
       this.gwidth = gwidth;
       this.gheight = gheight;
-      for (i = _i = 0; 0 <= gheight ? _i <= gheight : _i >= gheight; i = 0 <= gheight ? ++_i : --_i) {
+      for (i = _i = 0, _ref = gheight - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
         squares[i] = [];
-        for (j = _j = 0; 0 <= gwidth ? _j <= gwidth : _j >= gwidth; j = 0 <= gwidth ? ++_j : --_j) {
+        for (j = _j = 0, _ref1 = gwidth - 1; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; j = 0 <= _ref1 ? ++_j : --_j) {
           color = Square.Colors[Math.floor(Math.random() * 3)];
           squares[i][j] = new Square(color, swidth, sheight);
         }
@@ -72,7 +72,7 @@
 
   })();
 
-  tmp = new Grid(10, 10, 10, 10);
+  tmp = new Grid(15, 15, 10, 10);
 
   tmp.drawGrid(document.getElementById("canvy"));
 
