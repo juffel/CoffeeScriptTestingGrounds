@@ -36,8 +36,24 @@ class Grid
                 r_u_y=sq.height*(y+1)
                 ctx.fillRect(l_o_x, l_o_y, r_u_x, r_u_y)
 
+# canvyClick ist der event handler für clicks in den canvas
+window.canvyClick = (event) ->
+    event = event || window.event
+    canvas = document.getElementById("dynCan")
+    x = event.pageX - canvas.offsetLeft
+    y = event.pageY - canvas.offsetTop
+    
+    document.getElementById("x_coord").innerHTML="_"+x # x/y_coord sind felder
+    document.getElementById("y_coord").innerHTML="_"+y # im html-code
 
+######################################################
+# BUILDPAGE
 
+document.write("<p>Dies ist ein durch ein KaffeeSkript erzeugter Paragraph</p>")
+document.write("<canvas id='dynCan' width='150' height='150' style='border:1px solid #000000;' onclick='window.canvyClick()'></canvas>")
+document.write("<p>X: <b id='x_coord'> no x_value </b> | Y: <b id='y_coord'> no y_value </b></p>")
 tmp = new Grid(15,15,10,10)
-tmp.drawGrid(document.getElementById("canvy"))
+tmp.drawGrid(document.getElementById("dynCan"))
 
+
+$("#msgs").innerHTML="blubb"

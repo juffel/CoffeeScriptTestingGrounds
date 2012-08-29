@@ -72,8 +72,26 @@
 
   })();
 
+  window.canvyClick = function(event) {
+    var canvas, x, y;
+    event = event || window.event;
+    canvas = document.getElementById("dynCan");
+    x = event.pageX - canvas.offsetLeft;
+    y = event.pageY - canvas.offsetTop;
+    document.getElementById("x_coord").innerHTML = "_" + x;
+    return document.getElementById("y_coord").innerHTML = "_" + y;
+  };
+
+  document.write("<p>Dies ist ein durch ein KaffeeSkript erzeugter Paragraph</p>");
+
+  document.write("<canvas id='dynCan' width='150' height='150' style='border:1px solid #000000;' onclick='window.canvyClick()'></canvas>");
+
+  document.write("<p>X: <b id='x_coord'> no x_value </b> | Y: <b id='y_coord'> no y_value </b></p>");
+
   tmp = new Grid(15, 15, 10, 10);
 
-  tmp.drawGrid(document.getElementById("canvy"));
+  tmp.drawGrid(document.getElementById("dynCan"));
+
+  $("#msgs").innerHTML = "blubb";
 
 }).call(this);
