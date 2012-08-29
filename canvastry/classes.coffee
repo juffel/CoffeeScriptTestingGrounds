@@ -36,7 +36,8 @@ class Grid
                 r_u_y=sq.height*(y+1)
                 ctx.fillRect(l_o_x, l_o_y, r_u_x, r_u_y)
 
+
+
 tmp = new Grid(15,15,10,10)
 tmp.drawGrid(document.getElementById("canvy"))
 
-#tmp.printGridInfo()
