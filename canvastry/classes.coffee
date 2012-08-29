@@ -11,7 +11,7 @@ class Grid
 
     #gwidht, gheight: dimensions of grid
     #swidth, sheight: dimensions of squares in grid
-    constructor: (@gwidth, @gheight, swidth, sheight) ->
+    constructor: (@gwidth, @gheight, @swidth, @sheight) ->
         #fill squares-array
         for i in [0..gheight-1]
             squares[i] = []
@@ -23,7 +23,8 @@ class Grid
         for sq in squares
             document.getElementById("msgs").innerHTML += "#{sq.color}, #{sq.width}, #{sq.height}"
 
-    drawGrid: (canvas) ->
+    drawGrid: () ->
+        canvas = document.getElementById("dynCan")
         ctx = canvas.getContext("2d")
 
         for arr, y in squares
@@ -36,6 +37,10 @@ class Grid
                 r_u_y=sq.height*(y+1)
                 ctx.fillRect(l_o_x, l_o_y, r_u_x, r_u_y)
 
+    redrawSquare: (grid_x, grid_y) ->
+        squares[grid_y][grid_x].color= Square.Colors[Math.floor(Math.random() * Square.Colors.length)]
+        @drawGrid()
+
 # canvyClick ist der event handler für clicks in den canvas
 window.canvyClick = (event) ->
     event = event || window.event
@@ -45,6 +50,13 @@ window.canvyClick = (event) ->
     
     document.getElementById("x_coord").innerHTML="_"+x # x/y_coord sind felder
     document.getElementById("y_coord").innerHTML="_"+y # im html-code
+    clickMod(x,y)
+
+clickMod = (x, y) ->
+    canvas = document.getElementById("dynCan")
+    grid_x = Math.floor(x/10)
+    grid_y = Math.floor(y/10)
+    tmp.redrawSquare(grid_x, grid_y)
 
 ######################################################
 # BUILDPAGE
