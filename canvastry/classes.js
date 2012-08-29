@@ -2,6 +2,8 @@
 (function() {
   var Grid, Square;
 
+  document.write("classes.js loaded");
+
   Square = (function() {
 
     Square.Colors = {
