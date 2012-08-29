@@ -3,7 +3,7 @@
 
 <head>
 <script src="jquery-1.8.0.js"></script>
-
+<script src="functions.js"></script>
 </head>
 
 <body>
@@ -11,16 +11,7 @@
 <canvas id="canvy" width="150" height="150" style="border:1px solid #000000;" onclick="canvyClick()"></canvas>
 <p id="msgs" style="border:1px solid #000001;">No msgs so far</p>
 </body>
-<script>
-function canvyClick(event) {
-    event = event || window.event;
-    var canvas = document.getElementById("canvy"),
-        x = event.pageX - canvy.offsetLeft,
-        y = event.pageY - canvy.offsetTop;
 
-    alert(x+' '+y);
-}
-</script>
 <script src="classes.js"></script>
 <script src="deeds.js"></script>
 </html>
