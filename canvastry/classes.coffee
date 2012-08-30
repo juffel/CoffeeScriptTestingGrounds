@@ -3,7 +3,7 @@
 #create grid and components
 #square dimensions in pixels (e.g. 10x10px)
 class Square
-    @Colors = ["FF0000", "00FF00", "0000FF"] #tbc
+    #@Colors = ["FF0080", "3B170B", "FF00FF", "00FF00", "0000FF"] #tbc
     constructor: (@color, @width, @height) ->
 
 ###############
@@ -19,7 +19,8 @@ class Grid
         for i in [0..gheight-1]
             squares[i] = []
             for j in [0..gwidth-1]
-                color= Square.Colors[Math.floor(Math.random() * 3)]
+                #color= Square.Colors[Math.floor(Math.random() * Square.Colors.length)]
+                color = get_random_color()
                 squares[i][j] = new Square(color, swidth, sheight)
 
     printGridInfo: ->
@@ -42,7 +43,8 @@ class Grid
 
     redrawSquare: ([x,y]) ->
         sq = squares[y][x]
-        sq.color= Square.Colors[Math.floor(Math.random() * Square.Colors.length)]
+        #sq.color= Square.Colors[Math.floor(Math.random() * Square.Colors.length)]
+        sq.color = get_random_color()
         @drawGrid()
 
 # canvyClick ist der event handler für clicks in den canvas
@@ -68,6 +70,13 @@ updateCoordinates = (x, y) ->
     [x_grid, y_grid] = calcGridCoords(x, y)
     $("#x_grid").text(x_grid)
     $("#y_grid").text(y_grid)
+
+get_random_color = () ->
+    letters = '0123456789ABDCEF'.split('')
+    color = '#'
+    for i in [0..5]
+        color += letters[Math.round(Math.random() * 15)]
+    color
 
 #################################################
 # BUILDPAGE
