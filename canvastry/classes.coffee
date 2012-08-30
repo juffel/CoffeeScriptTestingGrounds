@@ -3,8 +3,16 @@
 #create grid and components
 #square dimensions in pixels (e.g. 10x10px)
 class Square
-    #@Colors = ["FF0080", "3B170B", "FF00FF", "00FF00", "0000FF"] #tbc
     constructor: (@color, @width, @height) ->
+
+    rndColor: ->
+        @color = getRandomColor()
+
+    changeColor: (color) ->
+        @color = color
+
+    changeState: (state) ->
+        @state = state
 
 ###############
 # GRID
@@ -20,14 +28,14 @@ class Grid
             squares[i] = []
             for j in [0..gwidth-1]
                 #color= Square.Colors[Math.floor(Math.random() * Square.Colors.length)]
-                color = get_random_color()
+                color = getRandomColor()
                 squares[i][j] = new Square(color, swidth, sheight)
 
     drawGrid: () ->
         canvas = document.getElementById(@canvas_name)
         ctx = canvas.getContext("2d")
-        for arr, y in squares
-            for sq, x in arr
+        for arr, x in squares
+            for sq, y in arr
 
                 ctx.fillStyle=sq.color
                 l_o_x=sq.width*x
@@ -37,9 +45,20 @@ class Grid
                 ctx.fillRect(l_o_x, l_o_y, r_u_x, r_u_y)
 
     redrawSquare: (x,y) ->
-        sq = squares[y][x]
-        sq.color = get_random_color()
+        sq = squares[x][y]
+        sq.rndColor()
         @drawGrid()
+
+    redrawArea: (x, y) ->
+        datColor = squares[x][y].color
+        squares[(x-1)%@gwidth][y].changeColor(datColor)
+        squares[(x+1)%@gwidth][y].changeColor(datColor)
+        squares[x][(y-1)%@gheight].changeColor(datColor)
+        squares[x][(y+1)%@gheight].changeColor(datColor)
+        @drawGrid()
+
+    deactivateSquare: (x,y) ->
+        squares[x][y] = 0
 
     clickListener: (event) ->
         event = event || window.event
@@ -49,6 +68,7 @@ class Grid
         [gr_x, gr_y] = @calcGridCoords(x, y)
         updateCoordinates(gr_x, gr_y)
         @redrawSquare(gr_x, gr_y)
+        #@redrawArea(gr_x, gr_y)
     
     calcGridCoords: (x, y) ->
         gr_x = Math.floor(x/@swidth)
@@ -60,7 +80,7 @@ updateCoordinates = (x, y) ->
     $("#x_grid").text(x)
     $("#y_grid").text(y)
 
-get_random_color = () ->
+getRandomColor = () ->
     letters = '0123456789ABDCEF'.split('')
     color = '#'
     for i in [0..5]
@@ -70,17 +90,19 @@ get_random_color = () ->
 #################################################
 # BUILDPAGE
 
+#globalität ist nicht so schön...
+@grid = new Grid("dynCan", 10, 10, 20, 20)
+
 document.write("<p>Dies ist ein durch ein KaffeeSkript
                 erzeugter Paragraph</p>
 
-                <canvas id='dynCan' width='150' height='150'
-                style='border:1px solid #000000;'
+                <canvas id='dynCan' width="+(grid.gwidth*grid.swidth)+"
+                height="+(grid.gheight*grid.sheight)+"
                 onclick='grid.clickListener()'></canvas>
                
                 <p>Grid: X: <b id='x_grid'> no x_grid </b> | 
                 Y: <b id='y_grid'> no y_grid </b></p>")
  
 
-#globalität ist nicht so schön...
-@grid = new Grid("dynCan", 15, 15, 10, 10)
+
 grid.drawGrid(document.getElementById("dynCan"))
