@@ -60,16 +60,13 @@ clickMod = (x, y) ->
     tmp.redrawSquare(calcGridCoords(x, y))
 
 calcGridCoords = (x, y) ->
-    gr_x = Math.floor(x/10)
-    gr_y = Math.floor(y/10)
+    gr_x = Math.floor(x/tmp.swidth)
+    gr_y = Math.floor(y/tmp.sheight)
     return [gr_x, gr_y]
 
 updateCoordinates = (x, y) ->
-    $("#x_coord").text(x)
-    $("#y_coord").text(y)
-    [x_grid, y_grid] = calcGridCoords(x, y)
-    $("#x_grid").text(x_grid)
-    $("#y_grid").text(y_grid)
+    $("#x_grid").text(x)
+    $("#y_grid").text(y)
 
 get_random_color = () ->
     letters = '0123456789ABDCEF'.split('')
@@ -89,14 +86,9 @@ document.write("<p>Dies ist ein durch ein KaffeeSkript
                 onclick='window.canvyClick()'></canvas>
                
                 <p>Grid: X: <b id='x_grid'> no x_grid </b> | 
-                Y: <b id='y_grid'> no y_grid </b></p>
-
-                <p>X: <b id='x_coord'> no x_value </b> |
-                Y: <b id='y_coord'> no y_value </b></p>")
+                Y: <b id='y_grid'> no y_grid </b></p>")
  
 
-tmp = new Grid(15,15,10,10)
+#globalität ist nicht so schön...
+@tmp = new Grid(15,15,10,10)
 tmp.drawGrid(document.getElementById("dynCan"))
-
-
-$("#msgs").innerHTML="blubb"
