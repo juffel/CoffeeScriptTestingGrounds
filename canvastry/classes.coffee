@@ -14,7 +14,7 @@ class Grid
 
     #gwidht, gheight: dimensions of grid
     #swidth, sheight: dimensions of squares in grid
-    constructor: (@gwidth, @gheight, @swidth, @sheight) ->
+    constructor: (@canvas_name, @gwidth, @gheight, @swidth, @sheight) ->
         #fill squares-array
         for i in [0..gheight-1]
             squares[i] = []
@@ -23,14 +23,9 @@ class Grid
                 color = get_random_color()
                 squares[i][j] = new Square(color, swidth, sheight)
 
-    printGridInfo: ->
-        for sq in squares
-            document.getElementById("msgs").innerHTML += "#{sq.color}, #{sq.width}, #{sq.height}"
-
     drawGrid: () ->
-        canvas = document.getElementById("dynCan")
+        canvas = document.getElementById(@canvas_name)
         ctx = canvas.getContext("2d")
-
         for arr, y in squares
             for sq, x in arr
 
@@ -41,28 +36,25 @@ class Grid
                 r_u_y=sq.height*(y+1)
                 ctx.fillRect(l_o_x, l_o_y, r_u_x, r_u_y)
 
-    redrawSquare: ([x,y]) ->
+    redrawSquare: (x,y) ->
         sq = squares[y][x]
-        #sq.color= Square.Colors[Math.floor(Math.random() * Square.Colors.length)]
         sq.color = get_random_color()
         @drawGrid()
 
-# canvyClick ist der event handler für clicks in den canvas
-window.canvyClick = (event) ->
-    event = event || window.event
-    canvas = document.getElementById("dynCan")
-    x = event.pageX - canvas.offsetLeft
-    y = event.pageY - canvas.offsetTop
-    updateCoordinates(x, y)
-    clickMod(x,y)
+    clickListener: (event) ->
+        event = event || window.event
+        canvas = document.getElementById(@canvas_name)
+        x = event.pageX - canvas.offsetLeft
+        y = event.pageY - canvas.offsetTop
+        [gr_x, gr_y] = @calcGridCoords(x, y)
+        updateCoordinates(gr_x, gr_y)
+        @redrawSquare(gr_x, gr_y)
+    
+    calcGridCoords: (x, y) ->
+        gr_x = Math.floor(x/@swidth)
+        gr_y = Math.floor(y/@sheight)
+        return [gr_x, gr_y]
 
-clickMod = (x, y) ->
-    tmp.redrawSquare(calcGridCoords(x, y))
-
-calcGridCoords = (x, y) ->
-    gr_x = Math.floor(x/tmp.swidth)
-    gr_y = Math.floor(y/tmp.sheight)
-    return [gr_x, gr_y]
 
 updateCoordinates = (x, y) ->
     $("#x_grid").text(x)
@@ -83,12 +75,12 @@ document.write("<p>Dies ist ein durch ein KaffeeSkript
 
                 <canvas id='dynCan' width='150' height='150'
                 style='border:1px solid #000000;'
-                onclick='window.canvyClick()'></canvas>
+                onclick='grid.clickListener()'></canvas>
                
                 <p>Grid: X: <b id='x_grid'> no x_grid </b> | 
                 Y: <b id='y_grid'> no y_grid </b></p>")
  
 
 #globalität ist nicht so schön...
-@tmp = new Grid(15,15,10,10)
-tmp.drawGrid(document.getElementById("dynCan"))
+@grid = new Grid("dynCan", 15, 15, 10, 10)
+grid.drawGrid(document.getElementById("dynCan"))
