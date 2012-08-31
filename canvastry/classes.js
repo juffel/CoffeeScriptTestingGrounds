@@ -89,8 +89,14 @@
       return this.drawGrid();
     };
 
-    Grid.prototype.deactivateSquare = function(x, y) {
-      return squares[x][y] = 0;
+    Grid.prototype.redrawArea__ = function(x, y) {
+      var datColor;
+      datColor = squares[x][y].color;
+      squares[(x - 1) % this.gwidth][y].changeColor(datColor);
+      squares[(x + 1) % this.gwidth][y].changeColor(datColor);
+      squares[x][(y - 1) % this.gheight].changeColor(datColor);
+      squares[x][(y + 1) % this.gheight].changeColor(datColor);
+      return this.drawGrid();
     };
 
     Grid.prototype.clickListener = function(event) {
@@ -101,7 +107,20 @@
       y = event.pageY - canvas.offsetTop;
       _ref = this.calcGridCoords(x, y), gr_x = _ref[0], gr_y = _ref[1];
       updateCoordinates(gr_x, gr_y);
-      return this.redrawSquare(gr_x, gr_y);
+      return this.redrawArea__(gr_x, gr_y);
+    };
+
+    Grid.prototype.activateSquare = function(x, y) {
+      return this.activeSquare(x, y, 10);
+    };
+
+    Grid.prototype.activeSquare = function(x, y, count) {
+      if (count <= 0) {
+        return;
+      }
+      this.redrawSquare(x, y);
+      count = count - 1;
+      return setTimeout(this.activeSquare(x, y, count), 1000);
     };
 
     Grid.prototype.calcGridCoords = function(x, y) {

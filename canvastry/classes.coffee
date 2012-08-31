@@ -1,7 +1,3 @@
-##############
-# SQUARE
-#create grid and components
-#square dimensions in pixels (e.g. 10x10px)
 class Square
     constructor: (@color, @width, @height) ->
 
@@ -14,9 +10,6 @@ class Square
     changeState: (state) ->
         @state = state
 
-###############
-# GRID
-#grid dimensions in squares (e.g. 10x10square)
 class Grid
     squares = []
 
@@ -57,8 +50,13 @@ class Grid
         squares[x][(y+1)%@gheight].changeColor(datColor)
         @drawGrid()
 
-    deactivateSquare: (x,y) ->
-        squares[x][y] = 0
+    redrawArea__: (x, y) ->
+        datColor = squares[x][y].color
+        squares[(x-1)%@gwidth][y].changeColor(datColor)
+        squares[(x+1)%@gwidth][y].changeColor(datColor)
+        squares[x][(y-1)%@gheight].changeColor(datColor)
+        squares[x][(y+1)%@gheight].changeColor(datColor)
+        @drawGrid()
 
     clickListener: (event) ->
         event = event || window.event
@@ -67,8 +65,19 @@ class Grid
         y = event.pageY - canvas.offsetTop
         [gr_x, gr_y] = @calcGridCoords(x, y)
         updateCoordinates(gr_x, gr_y)
-        @redrawSquare(gr_x, gr_y)
-        #@redrawArea(gr_x, gr_y)
+        #@activateSquare(gr_x, gr_y)
+        #@redrawSquare(gr_x, gr_y)
+        @redrawArea__(gr_x, gr_y)
+
+    activateSquare: (x, y) ->
+        @activeSquare(x, y, 10)
+        
+    activeSquare: (x, y, count) ->
+        if count <= 0
+            return
+        @redrawSquare(x, y)
+        count = count-1
+        setTimeout @activeSquare(x, y, count), 1000
     
     calcGridCoords: (x, y) ->
         gr_x = Math.floor(x/@swidth)
